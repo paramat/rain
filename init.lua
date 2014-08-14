@@ -1,4 +1,4 @@
--- rain 0.1.0 by paramat
+-- rain 0.1.1 by paramat
 -- For latest stable Minetest and back to 0.4.8
 -- Depends default bucket
 -- License: code WTFPL, textures CC BY-SA
