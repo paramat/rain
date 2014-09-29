@@ -1,18 +1,14 @@
--- rain 0.1.4 by paramat
+-- rain 0.2.0 by paramat
 -- For latest stable Minetest and back to 0.4.8
 -- Depends default
 -- License: code WTFPL, textures CC BY-SA
-
--- drift by 4 nodes
--- abm node column at each corner
--- larger rain area
 
 -- Parameters
 
 local SPAWN = true -- Spawn new rainclouds in humid areas away from deserts
 local CLEAR = false -- Clear rainclouds when players are near
-local DEST = 0.4 -- Desert noise threshold
-local HUMT = -2 -- Humidity noise threshold
+local DEST = -0.4 -- MGV6 desert noise threshold for rain, desert at 0.4+
+local HUMT = 0.4 -- MGV6 humidity noise threshold for rain
 
 -- Nodes
 
@@ -97,7 +93,7 @@ minetest.register_node("rain:abmsw", {
 
 minetest.register_abm({
 	nodenames = {"default:dirt_with_grass"},
-	interval = 11,
+	interval = 31,
 	chance = 4096,
 	action = function(pos, node)
 		if not SPAWN then
@@ -218,7 +214,7 @@ minetest.register_abm({
 
 minetest.register_abm({
 	nodenames = {"rain:abmne", "rain:abmnwx", "rain:abmse", "rain:abmsw"},
-	interval = 11,
+	interval = 17,
 	chance = 64,
 	action = function(pos, node)
 		local x = pos.x
@@ -301,15 +297,20 @@ minetest.register_abm({
 					elseif zz >= pos2.z - 3 and nodid == c_cloud then -- erase previous cloud
 						data[vi] = c_air
 					end
-				elseif xx == pos2.x and zz == pos2.z - 4 and nodid == c_air then -- new abm columns
+				elseif xx == pos2.x and zz == pos2.z - 4 -- new abm columns
+				and nodid == c_air then
 					data[vi] = c_abmne
-				elseif xx == pos1.x and zz == pos2.z - 4 and nodid == c_air then
+				elseif xx == pos1.x and zz == pos2.z - 4
+				and nodid == c_air then
 					data[vi] = c_abmnw
-				elseif xx == pos2.x and zz == pos1.z and nodid == c_air then
+				elseif xx == pos2.x and zz == pos1.z
+				and nodid == c_air then
 					data[vi] = c_abmse
-				elseif xx == pos1.x and zz == pos1.z and nodid == c_air then
+				elseif xx == pos1.x and zz == pos1.z
+				and nodid == c_air then
 					data[vi] = c_abmsw
-				elseif yy == 63 and xx >= pos1.x + 8 and xx <= pos2.x - 8 -- new rain columns
+				elseif yy == 63
+				and xx >= pos1.x + 8 and xx <= pos2.x - 8 -- new rain columns
 				and zz >= pos1.z + 8 and zz <= pos1.z + 11
 				and math.random() < 0.25 then
 					local vir = vi
@@ -321,13 +322,17 @@ minetest.register_abm({
 						end
 						vir = vir - vvii
 					end
-				elseif xx == pos2.x and zz == pos2.z and nodid == c_abmne then -- erase previous abm columns
+				elseif xx == pos2.x and zz == pos2.z -- erase previous abm columns
+				and nodid == c_abmne then
 					data[vi] = c_air
-				elseif xx == pos1.x and zz == pos2.z and nodid == c_abmnw then
+				elseif xx == pos1.x and zz == pos2.z
+				and nodid == c_abmnw then
 					data[vi] = c_air
-				elseif xx == pos2.x and zz == pos1.z + 4 and nodid == c_abmse then
+				elseif xx == pos2.x and zz == pos1.z + 4
+				and nodid == c_abmse then
 					data[vi] = c_air
-				elseif xx == pos1.x and zz == pos1.z + 4 and nodid == c_abmsw then
+				elseif xx == pos1.x and zz == pos1.z + 4
+				and nodid == c_abmsw then
 					data[vi] = c_air
 				elseif zz >= pos2.z - 11 and nodid == c_rain then -- erase previous rain
 					data[vi] = c_air
